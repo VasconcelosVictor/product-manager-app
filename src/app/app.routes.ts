@@ -8,6 +8,12 @@ import { ProductsService } from './shared/services/products.service';
 export const routes: Routes = [
   {
     path: '',
+    resolve:{
+      products: () => {
+        const productService = inject(ProductsService);
+        return productService.getAll();
+      }
+    },
     component: ListComponent,
   },
   {
@@ -25,7 +31,7 @@ export const routes: Routes = [
           return productService.get(route.params['id']);
         }
         },
-    
+
     loadComponent: () =>
       import('./features/edit/edit.component').then((m) => m.EditComponent),
   },

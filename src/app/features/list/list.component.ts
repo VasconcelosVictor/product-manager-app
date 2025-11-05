@@ -1,7 +1,7 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog } from "@angular/material/dialog";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { Product } from '../../shared/interfaces/products.inteface';
 import { ProductsService } from '../../shared/services/products.service';
 import { CardComponent } from './components/card/card.component';
@@ -15,19 +15,14 @@ import { ConfirmationDialogService } from '../../shared/services/confirmation-di
   templateUrl: './list.component.html',
   styleUrl: './list.component.scss'
 })
-export class ListComponent implements OnInit {
-  products: Product[] = [];
+export class ListComponent {
+  products = signal<Product[]>(inject(ActivatedRoute).snapshot.data['products']) ;
+
   productService = inject(ProductsService);
   router = inject(Router);
   matDialog = inject(MatDialog);
   confirmationDialogService = inject(ConfirmationDialogService);
 
-  ngOnInit(): void {
-    this.productService.getAll().subscribe((products) => {
-      this.products = products;
-    })
-
-  }
 
   onEdit(product: Product) {
     this.router.navigate(['/edit-product', product.id]);
@@ -40,7 +35,7 @@ export class ListComponent implements OnInit {
     .subscribe(() => {
       this.productService.delete(product.id).subscribe(() => {
         this.productService.getAll().subscribe((products) => {
-          this.products = products;
+          this.products.set(products);
         })
 
       });
