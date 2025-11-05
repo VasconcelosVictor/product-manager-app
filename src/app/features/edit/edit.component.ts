@@ -5,11 +5,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../../shared/interfaces/products.inteface';
 import { FormComponent } from '../../shared/components/form/form.component';
+import { BackToListComponent } from '../../shared/components/back-to-list/back-to-list.component';
 
 @Component({
   selector: 'app-edit',
   standalone: true,
-  imports: [FormComponent],
+  imports: [FormComponent,
+    BackToListComponent],
   templateUrl: './edit.component.html',
   styleUrl: './edit.component.scss'
 })
